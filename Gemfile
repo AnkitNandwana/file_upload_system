@@ -21,7 +21,7 @@ gem "jbuilder"
 gem "devise", "~> 4.9"
 # gem "aws-sdk-s3", "~> 1.0" # For production storage
 gem "sidekiq", "~> 7.0"
-gem "redis", "~> 4.0"
+gem "redis", "~> 5.4"
 gem "mimemagic", "~> 0.4"
 gem "rubyzip", "~> 2.3" # For file compression
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
