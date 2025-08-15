@@ -315,7 +315,7 @@ GEM
       rubocop-performance (>= 1.24)
       rubocop-rails (>= 2.30)
     ruby-progressbar (1.13.0)
-    rubyzip (2.4.1)
+    rubyzip (3.0.1)
     securerandom (0.4.1)
     selenium-webdriver (4.35.0)
       base64 (~> 0.2)
@@ -419,7 +419,7 @@ DEPENDENCIES
   redis
   redis-namespace
   rubocop-rails-omakase
-  rubyzip (~> 2.3)
+  rubyzip (~> 3.0)
   selenium-webdriver
   sidekiq (~> 6.5.12)
   sidekiq-limit_fetch

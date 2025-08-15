@@ -21,7 +21,7 @@ gem "jbuilder"
 gem "devise", "~> 4.9"
 # gem "aws-sdk-s3", "~> 1.0" # For production storage
 gem "mimemagic", "~> 0.4"
-gem "rubyzip", "~> 2.3" # For file compression
+gem "rubyzip", "~> 3.0" # For file compression
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 #
