@@ -27,7 +27,7 @@ gem "rubyzip", "~> 2.3" # For file compression
 #
 ## sidekiq
 gem "activejob-uniqueness", require: "active_job/uniqueness/sidekiq_patch"
-gem "sidekiq", "~> 6.5.12"
+gem "sidekiq", "~> 8.0.7"
 gem "sidekiq-limit_fetch"
 
 # redis
