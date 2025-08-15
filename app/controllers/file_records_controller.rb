@@ -26,8 +26,14 @@ class FileRecordsController < ApplicationController
   end
 
   def share
-    @shared_link = @file_record.shared_link || @file_record.create_shared_link
-    redirect_to file_records_path, notice: "Shareable link: #{shared_file_url(@shared_link.slug)}"
+    begin
+      @file_record = current_user.file_records.find(params[:id])
+      @shared_link = @file_record.shared_link || @file_record.create_shared_link
+      @shared_link.update!(slug: SecureRandom.urlsafe_base64(8))
+      redirect_to @file_record, notice: "Shareable link created successfully"
+    rescue => e
+      redirect_to @file_record, alert: "Failed to create share link: #{e.message}"
+    end
   end
 
   private

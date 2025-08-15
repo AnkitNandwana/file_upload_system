@@ -1,9 +1,9 @@
 class SharedFilesController < ApplicationController
-  skip_before_action :authenticate_user!
+  # skip_before_action :authenticate_user!
 
   def show
     @shared_link = SharedLink.find_by(slug: params[:slug])
-    if @shared_link.nil? || @shared_link.expired?
+    if @shared_link.nil? || @shared_link.expires_at < Time.now
       redirect_to root_path, alert: "Link is invalid or has expired"
     else
       @file_record = @shared_link.file_record
