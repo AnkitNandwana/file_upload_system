@@ -1,0 +1,12 @@
+<% content_for :title, "Editing file record" %>
+
+<h1>Editing file record</h1>
+
+<%= render "form", file_record: @file_record %>
+
+<br>
+
+<div>
+  <%= link_to "Show this file record", @file_record %> |
+  <%= link_to "Back to file records", file_records_path %>
+</div>

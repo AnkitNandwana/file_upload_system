@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @file_record %>
+
+<div>
+  <%= link_to "Edit this file record", edit_file_record_path(@file_record) %> |
+  <%= link_to "Back to file records", file_records_path %>
+
+  <%= button_to "Destroy this file record", @file_record, method: :delete %>
+</div>
