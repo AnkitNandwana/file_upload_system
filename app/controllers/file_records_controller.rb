@@ -1,6 +1,6 @@
 class FileRecordsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_file_record, only: [ :show, :edit, :update, :destroy, :share ]
+  before_action :set_file_record, only: [ :show, :edit, :destroy, :share ]
 
   def index
     @file_records = current_user.file_records.order(created_at: :desc)
