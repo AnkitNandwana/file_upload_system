@@ -22,3 +22,25 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+
+Setup Instructions
+
+Clone the repository
+
+Run bundle install
+
+Set up PostgreSQL database
+
+Run migrations: rails db:create db:migrate
+
+Install Redis for Sidekiq
+
+Start services:
+
+redis-server
+
+bundle exec sidekiq
+
+rails server
+

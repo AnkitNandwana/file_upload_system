@@ -1,7 +1,7 @@
 default: &default
   port: 6379
   host: <%= Rails.application.credentials.redis&.host || 'localhost' %>
-  db: <%= Rails.application.credentials.redis&.db || 10 %>
+  db: <%= Rails.application.credentials.redis&.db || 25 %>
   namespace: <%= Rails.application.credentials.redis&.namespace %>
 
 development:
