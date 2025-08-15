@@ -1,0 +1,33 @@
+<div class="auth-container">
+  <h2 class="auth-title">Log in</h2>
+
+  <!-- Add this flash message display -->
+  <%= render "devise/shared/error_messages", resource: resource %>
+
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="auth-field">
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+    </div>
+
+    <div class="auth-field">
+      <%= f.label :password %>
+      <%= f.password_field :password, autocomplete: "current-password" %>
+    </div>
+
+    <% if devise_mapping.rememberable? %>
+      <div class="remember-me">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end %>
+
+    <div class="auth-actions">
+      <%= f.submit "Log in", class: "auth-btn" %>
+    </div>
+  <% end %>
+
+  <div class="shared-links">
+    <%= render "devise/shared/links" %>
+  </div>
+</div>

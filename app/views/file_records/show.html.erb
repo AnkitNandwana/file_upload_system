@@ -1,10 +1,152 @@
-<p style="color: green"><%= notice %></p>
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header bg-white">
+      <div class="d-flex justify-content-between align-items-center">
+        <h2 class="mb-0"><%= @file_record.title %></h2>
+        <%= link_to 'Back to Files', file_records_path, class: 'btn btn-outline-secondary' %>
+      </div>
+    </div>
 
-<%= render @file_record %>
+    <div class="card-body">
+      <!-- File Details Section -->
+      <div class="file-details mb-4 p-3 border rounded">
+        <div class="row">
+          <div class="col-md-6">
+            <p><strong>Description:</strong></p>
+            <p class="text-muted"><%= @file_record.description.presence || 'No description provided' %></p>
+          </div>
+          <div class="col-md-6">
+            <p><strong>File Details:</strong></p>
+            <ul class="list-unstyled text-muted">
+              <li><strong>Name:</strong> <%= @file_record.file.filename %></li>
+              <li><strong>Type:</strong> <%= @file_record.file.content_type %></li>
+              <li><strong>Size:</strong> <%= number_to_human_size(@file_record.file.byte_size) %></li>
+              <li><strong>Uploaded:</strong> <%= time_ago_in_words(@file_record.created_at) %> ago</li>
+            </ul>
+          </div>
+        </div>
+      </div>
 
-<div>
-  <%= link_to "Edit this file record", edit_file_record_path(@file_record) %> |
-  <%= link_to "Back to file records", file_records_path %>
+      <!-- File Actions -->
+      <div class="file-actions mb-4">
+        <%= link_to 'Download', rails_blob_path(@file_record.file, disposition: 'attachment'), 
+                    class: 'btn btn-primary me-2' %>
+        <%= button_to 'Delete', @file_record, 
+                      method: :delete, 
+                      data: { confirm: 'Are you sure you want to delete this file?' },
+                      class: 'btn btn-danger me-2' %>
+        <% if @file_record.shared_link %>
+          <%= button_to 'Refresh Link', share_file_record_path(@file_record), 
+                        method: :post, 
+                        class: 'btn btn-warning me-2' %>
+        <% else %>
+          <%= button_to 'Generate Share Link', share_file_record_path(@file_record), 
+                        method: :post, 
+                        class: 'btn btn-success me-2' %>
+        <% end %>
+      </div>
 
-  <%= button_to "Destroy this file record", @file_record, method: :delete %>
+      <!-- Sharing Section -->
+      <% if @file_record.shared_link %>
+        <div class="sharing-section p-4 bg-light rounded">
+          <h4 class="mb-3"><i class="bi bi-share"></i> Share Options</h4>
+          
+          <!-- Tiny URL Box -->
+          <div class="mb-3">
+            <label class="form-label">Tiny Shareable URL</label>
+            <div class="input-group">
+              <input type="text" 
+                     class="form-control" 
+                     value="<%= shared_file_url(@file_record.shared_link.slug) %>" 
+                     id="shareLink" 
+                     readonly>
+              <button class="btn btn-outline-secondary" 
+                      type="button" 
+                      onclick="copyToClipboard('shareLink')">
+                <i class="bi bi-clipboard"></i> Copy
+              </button>
+            </div>
+            <small class="text-muted">
+              Expires: <%= @file_record.shared_link.expires_at.to_formatted_s(:long) %>
+              (<%= distance_of_time_in_words(Time.current, @file_record.shared_link.expires_at) %> remaining)
+            </small>
+          </div>
+
+          <!-- Share Buttons -->
+          <div class="share-buttons">
+            <p class="mb-2"><strong>Share via:</strong></p>
+            <div class="d-flex gap-2">
+              <!-- Email -->
+              <button class="btn btn-outline-primary" 
+                      data-bs-toggle="modal" 
+                      data-bs-target="#emailShareModal">
+                <i class="bi bi-envelope"></i> Email
+              </button>
+
+              <!-- Social Media -->
+              <a href="mailto:?body=<%= u shared_file_url(@file_record.shared_link.slug) %>" 
+                 class="btn btn-outline-info">
+                <i class="bi bi-mailbox"></i> Mail Client
+              </a>
+              
+              <!-- WhatsApp -->
+              <a href="https://wa.me/?text=<%= u "Check out this file: #{shared_file_url(@file_record.shared_link.slug)}" %>" 
+                 target="_blank" 
+                 class="btn btn-outline-success">
+                <i class="bi bi-whatsapp"></i> WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
 </div>
+
+<!-- Email Share Modal -->
+<div class="modal fade" id="emailShareModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Share via Email</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <%= form_with url: send_share_email_file_record_path(@file_record), method: :post do |f| %>
+        <div class="modal-body">
+          <div class="mb-3">
+            <%= f.label :recipient_email, "Recipient Email", class: 'form-label' %>
+            <%= f.email_field :recipient_email, class: 'form-control', required: true %>
+          </div>
+          <div class="mb-3">
+            <%= f.label :message, "Personal Message (optional)", class: 'form-label' %>
+            <%= f.text_area :message, class: 'form-control', rows: 3 %>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <%= f.submit "Send Email", class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript for Copy Functionality -->
+<script>
+  function copyToClipboard(elementId) {
+    const copyText = document.getElementById(elementId);
+    copyText.select();
+    copyText.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
+    
+    // Show tooltip or alert
+    const originalText = event.target.innerHTML;
+    event.target.innerHTML = '<i class="bi bi-check"></i> Copied!';
+    setTimeout(() => {
+      event.target.innerHTML = originalText;
+    }, 2000);
+  }
+</script>
+
+<!-- Add Bootstrap Icons in your layout head -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">

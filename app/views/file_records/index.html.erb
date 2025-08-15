@@ -51,6 +51,12 @@
                               data: { confirm: 'Are you sure?' }, 
                               class: 'btn btn-danger btn-sm' %>
               </td>
+
+              <td>
+                <%= button_to 'Share', share_file_record_path(file_record), 
+                              method: :post, 
+                              class: 'btn btn-info btn-sm mb-1' %>
+              </td>
             </tr>
           <% end %>
         </tbody>
